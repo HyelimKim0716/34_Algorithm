@@ -9,55 +9,16 @@ public class WalkUpStairs {
             stairs[i] = sc.nextInt();
         }
 
+        // result[n] = max( 이전 계단을 밟지 않고 온 경우 || 이전 계단을 밟고 온 경우 )
+        // result[n] = max( result[n-2] + stairs[n]|| result[n-3] + stairs[n] + stairs[n-1] )
         int[] result = new int[count];
 
-        if (count == 1) {
-            System.out.println(stairs[0]);
-            return;
-        }
+        result[0] = stairs[0];
+        result[1] = Math.max(stairs[0] + stairs[1], stairs[1]);
+        result[2] = Math.max(stairs[0] + stairs[2], stairs[1] + stairs[2]);
 
-        if (count == 2) {
-            System.out.println(stairs[0] + stairs[1]);
-            return;
-        }
-
-        if (count == 3) {
-            if (stairs[0] > stairs[1])
-                System.out.println(stairs[0] + stairs[2]);
-            else
-                System.out.println(stairs[1] + stairs[2]);
-
-            return;
-        }
-
-        result[count - 1] = stairs[count - 1];
-
-        for (int i = count - 1; i >= 2; i--) {
-            if (result[i] == 0)
-                continue;
-
-            if (stairs[i - 1] > stairs[i - 2]) {
-                result[i - 1] = stairs[i - 1] + result[i];
-                result[i - 2] = 0;
-            } else {
-                result[i - 2] = stairs[i - 2] + result[i];
-                result[i - 1] = 0;
-            }
-
-//            System.out.println("result[" + i + "] = " + result[i]);
-        }
-
-        if (result[2] == 0) {
-            result[1] = result[3] + stairs[1];
-            result[0] = result[1] + stairs[0];
-        } else {
-            if (result[1] > result[0]) {
-                result[1] = result[2] + stairs[1];
-                result[0] = 0;
-            } else {
-                result[0] = result[2] + stairs[0];
-                result[1] = 0;
-            }
+        for (int i = 3; i < count; i++) {
+            result[i] = Math.max(result[i - 2] + stairs[i], result[i - 3] + stairs[i - 1] + stairs[i]);
         }
 
 //        for (int i = result.length - 1; i >= 0; i--) {
@@ -65,6 +26,6 @@ public class WalkUpStairs {
 //        }
 
         // Result
-        System.out.println(Math.max(result[0], result[1]));
+        System.out.println(result[count - 1]);
     }
 }
