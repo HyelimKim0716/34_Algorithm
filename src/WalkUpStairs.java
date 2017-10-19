@@ -10,24 +10,61 @@ public class WalkUpStairs {
         }
 
         int[] result = new int[count];
-        for (int i = 0; i < count; i++) {
-            if (i == 0) {
-                result[0] = stairs[0];
-            } else if (i == 1) {
-                result[1] = result[0] + stairs[1];
-            } else if (i == 2) {
-                result[i] = Math.max(stairs[i-1], stairs[i-2]) + stairs[i];
-            } else {
-                if (Math.max(result[i-2], result[i-3]) == result[i-2]) {
-                    result[i] = result[i-2] + stairs[i];
-                } else {
-                    result[i] = Math.max(result[i-1], result[i-2]) + stairs[i];
-                }
-            }
 
-            System.out.println("result[" + i + "] = " + result[i]);
+        if (count == 1) {
+            System.out.println(stairs[0]);
+            return;
         }
 
-        System.out.println(result[result.length - 1]);
+        if (count == 2) {
+            System.out.println(stairs[0] + stairs[1]);
+            return;
+        }
+
+        if (count == 3) {
+            if (stairs[0] > stairs[1])
+                System.out.println(stairs[0] + stairs[2]);
+            else
+                System.out.println(stairs[1] + stairs[2]);
+
+            return;
+        }
+
+        result[count - 1] = stairs[count - 1];
+
+        for (int i = count - 1; i >= 2; i--) {
+            if (result[i] == 0)
+                continue;
+
+            if (stairs[i - 1] > stairs[i - 2]) {
+                result[i - 1] = stairs[i - 1] + result[i];
+                result[i - 2] = 0;
+            } else {
+                result[i - 2] = stairs[i - 2] + result[i];
+                result[i - 1] = 0;
+            }
+
+//            System.out.println("result[" + i + "] = " + result[i]);
+        }
+
+        if (result[2] == 0) {
+            result[1] = result[3] + stairs[1];
+            result[0] = result[1] + stairs[0];
+        } else {
+            if (result[1] > result[0]) {
+                result[1] = result[2] + stairs[1];
+                result[0] = 0;
+            } else {
+                result[0] = result[2] + stairs[0];
+                result[1] = 0;
+            }
+        }
+
+//        for (int i = result.length - 1; i >= 0; i--) {
+//            System.out.println("result[" + i + "] = " + result[i]);
+//        }
+
+        // Result
+        System.out.println(Math.max(result[0], result[1]));
     }
 }
